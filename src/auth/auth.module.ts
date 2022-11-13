@@ -10,7 +10,7 @@ import { LocalStrategy } from './utils/local.strategy';
 
 @Module({
   imports:[PassportModule,UserModule,PrismaModule,JwtModule.register({
-    secret: 'JWT_KEY',
+    secret: process.env.JWT_SECRET,
     signOptions: { expiresIn: '220d' },
   })
 ],
