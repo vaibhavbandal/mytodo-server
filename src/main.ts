@@ -21,7 +21,7 @@ async function bootstrap() {
   app.use(passport.session());
   await app.listen(process.env.PORT || 3000);
   console.info('=============================');
-  console.info('mytodo-server started at 3000');
+  console.info(`mytodo-server started at ${process.env.PORT}`);
   console.info('=============================');
 }
 bootstrap();
