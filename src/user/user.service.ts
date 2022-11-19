@@ -4,25 +4,21 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
+  constructor(private readonly prismaService: PrismaService) {}
 
-    constructor(private readonly prismaService:PrismaService){}
+  // Local Auth
+  async validateUserLocal(email: string, password: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-    // Local Auth 
-    async validateUserLocal(email:string,password:string){
-        const user = await this.prismaService.user.findUnique({
-          where:{
-            email:email
-          }
-        })
-
-        if (user && user.password === password) {
-            const {password, ...result} = user;
-            return result;
-        }
-        return null;
+    if (user && user.password === password) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
     }
-
-
-
-
+    return null;
+  }
 }

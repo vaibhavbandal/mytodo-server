@@ -5,9 +5,9 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { LocalStrategy } from 'src/auth/utils/local.strategy';
 
 @Module({
-  imports:[PrismaModule],
+  imports: [PrismaModule],
   providers: [UserService],
   controllers: [UserController],
-  exports:[UserService]
+  exports: [UserService],
 })
 export class UserModule {}

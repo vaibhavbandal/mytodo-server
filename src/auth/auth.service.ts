@@ -6,24 +6,27 @@ import { RegisterUserDto } from './dto/user-register.dto';
 
 @Injectable()
 export class AuthService {
+  constructor(
+    private readonly prismaService: PrismaService,
+    private jwtTokenService: JwtService,
+  ) {}
 
-  constructor(private readonly prismaService: PrismaService,
-    private jwtTokenService: JwtService) { }
-
-  // This is for google Authentication... 
+  // This is for google Authentication...
   async validateUser(details: Prisma.UserCreateInput) {
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: details.email
-      }
-    })
+        email: details.email,
+      },
+    });
     if (user) return user;
-    const newUser = await this.prismaService.user.create({ data: details })
+    const newUser = await this.prismaService.user.create({ data: details });
     return newUser;
   }
 
   async findUser(id: string) {
-    const user = await this.prismaService.user.findUnique({ where: { id: id } })
+    const user = await this.prismaService.user.findUnique({
+      where: { id: id },
+    });
     return user;
   }
 
@@ -38,33 +41,36 @@ export class AuthService {
 
   async registerNewUser(bodyData: RegisterUserDto) {
     try {
-
       const isUserExist = await this.prismaService.user.findUnique({
-        where:{
-          email:bodyData.email
-        }
-      })
+        where: {
+          email: bodyData.email,
+        },
+      });
 
-      if(isUserExist){
-        throw new HttpException({ msg: 'Email is already used!' }, HttpStatus.FORBIDDEN)
-      }else{
+      if (isUserExist) {
+        throw new HttpException(
+          { msg: 'Email is already used!' },
+          HttpStatus.FORBIDDEN,
+        );
+      } else {
         const newUser = await this.prismaService.user.create({
-          data:{
-            email:bodyData.email,
-            provider:Provider.MANUAL,
-            role:Role.USER,
-            password:bodyData.password,
-          }
-        })
-        const {password, ...result} = newUser;
+          data: {
+            email: bodyData.email,
+            provider: Provider.MANUAL,
+            role: Role.USER,
+            password: bodyData.password,
+          },
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...result } = newUser;
         return result;
       }
-
     } catch (error) {
       console.info(error);
-      throw new HttpException({ msg: 'Email is already used!' }, HttpStatus.FORBIDDEN)
+      throw new HttpException(
+        { msg: 'Email is already used!' },
+        HttpStatus.FORBIDDEN,
+      );
     }
-
   }
-
-  }
+}
