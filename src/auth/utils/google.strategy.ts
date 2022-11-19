@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject('AUTH_SERVICE') private readonly authService: AuthService,
-  ) { 
+  ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -26,8 +26,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser({
       email: profile.emails[0].value,
       name: profile.displayName,
-      role:Role.USER,
-      provider:Provider.GOOGLE
+      role: Role.USER,
+      provider: Provider.GOOGLE,
     });
     return user || null;
   }

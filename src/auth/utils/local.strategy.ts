@@ -8,11 +8,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private userService: UserService) {
     super();
   }
- 
-//  This method automatic calls when user passes username and password from body.
-//  *****MUST MUST MUST MUST username and password field*****
+
+  //  This method automatic calls when user passes username and password from body.
+  //  *****MUST MUST MUST MUST username and password field*****
   async validate(username: string, password: string): Promise<any> {
-    const user = await this.userService.validateUserLocal(username,password);
+    const user = await this.userService.validateUserLocal(username, password);
     if (null) {
       throw new UnauthorizedException();
     }

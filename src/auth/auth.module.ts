@@ -10,13 +10,18 @@ import { JwtStrategy } from './utils/jwt.strategy';
 import { LocalStrategy } from './utils/local.strategy';
 
 @Module({
-  imports:[PassportModule,UserModule,PrismaModule, BcryptModule,JwtModule.register({
-    secret: process.env.JWT_SECRET,
-    signOptions: { expiresIn: '220d' },
-  })
-],
+  imports: [
+    PassportModule,
+    UserModule,
+    PrismaModule,
+    BcryptModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '220d' },
+    }),
+  ],
   controllers: [AuthController],
-  providers: [AuthService,LocalStrategy,JwtStrategy],
-  exports:[AuthService,JwtModule]
+  providers: [AuthService, LocalStrategy, JwtStrategy],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
