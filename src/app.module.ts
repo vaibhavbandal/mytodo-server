@@ -7,6 +7,7 @@ import { AuthService } from './auth/auth.service';
 import { GoogleStrategy } from './auth/utils/google.strategy';
 import { SessionSerializer } from './auth/utils/Serializer';
 import { BcryptModule } from './common/bcrypt.module';
+import { DateModule } from './common/date/date.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
   imports: [
     AuthModule,
     BcryptModule,
+    DateModule,
     PrismaModule,
     PassportModule.register({ session: true }),
     UserModule,
