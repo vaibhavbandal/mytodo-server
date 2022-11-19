@@ -34,15 +34,19 @@ export class AuthService {
 
   // This is for Manual login
   async loginWithCredentials(user: any) {
-    const payload = {
-      email: user.email,
-      id: user.id,
-      role: Role.USER,
-    };
+    try {
+      const payload = {
+        email: user.email,
+        id: user.id,
+        role: Role.USER,
+      };
 
-    return {
-      access_token: this.jwtTokenService.sign(payload),
-    };
+      return {
+        access_token: this.jwtTokenService.sign(payload),
+      };
+    } catch (error) {
+      throw new HttpException({ msg: 'JWT_ERROR' }, HttpStatus.FORBIDDEN);
+    }
   }
 
   async registerNewUser(bodyData: RegisterUserDto) {
@@ -68,11 +72,11 @@ export class AuthService {
             password: await this.bcryptService.plainToHash(uPassword),
           },
         });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = newUser;
         return result;
       }
     } catch (error) {
-      console.info(error);
       throw new HttpException(
         { msg: 'Email is already used!' },
         HttpStatus.FORBIDDEN,

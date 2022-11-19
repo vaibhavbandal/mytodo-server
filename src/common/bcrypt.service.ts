@@ -8,7 +8,7 @@ export class BcryptService {
     return hash;
   };
 
-  compaireHash = async (pass: string, hashPass: string): Promise<boolean> => {
+  compareHash = async (pass: string, hashPass: string): Promise<boolean> => {
     return await bcrypt.compare(pass, hashPass);
   };
 }
