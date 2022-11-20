@@ -132,4 +132,111 @@ export class AuthService {
       );
     }
   }
+
+  async forgotVerification(email: { email: string }) {
+    // const uPassword = bodyData.password;
+    const OTP = Math.floor(100000 + Math.random() * 900000);
+    try {
+      const findUser = await this.prismaService.user.findUnique({
+        where: {
+          email: email.email,
+        }
+      });
+      if (findUser) {
+        this.cacheManegerService.addToCache({
+          email: email.email,
+          otp: OTP,
+          verification: false
+        });
+        const emailSend = await this.sendEmailService.sendEmail();
+        return emailSend;
+      }
+    } catch (error) {
+      throw new HttpException(
+        { msg: 'Username Not found!' },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async forgotOtpVerification(otp: { otp: number }) {
+    try {
+      const cacheData: any = await this.cacheManegerService.getData();
+      const getOtpFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.otp;
+      };
+      const cacheOtp: number = await getOtpFromCache(cacheData);
+      const cacheAllData: any = {
+        email: cacheData.email,
+        verification: true
+      }
+      if (cacheOtp == otp.otp) {
+        this.cacheManegerService.addToCache(cacheAllData)
+        return "Otp Verify Successfully!"
+      } else {
+        throw new HttpException(
+          { msg: 'Invalid Otp!' },
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    } catch (error) {
+      throw new HttpException(
+        { msg: 'Try Again!' },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async changePassword(newPassword: { newPassword: string }) {
+    try {
+      const cacheData: any = await this.cacheManegerService.getData();
+      const getEmailFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.email;
+      };
+      const getVerifyFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.verification;
+      };
+      const cacheEmail: string = await getEmailFromCache(cacheData);
+      const cacheVerification: boolean = await getVerifyFromCache(cacheData);
+
+      if (cacheVerification) {
+        const userData: RegisterUserDto = await this.prismaService.user.findUnique({
+          where: {
+            email: cacheEmail
+          }
+        })
+
+        const userDataModify: any = {
+          email: userData.email,
+          password: await this.bcryptService.plainToHash(newPassword.newPassword)
+        }
+        
+        const updatePassword = await this.prismaService.user.update({
+          where: {
+            email: userData.email,
+          },
+          data: { ...userDataModify },
+        })
+
+        if(updatePassword){
+          return "Password Update Succefully"
+        }else{
+          throw new HttpException(
+            { msg: 'Password Update Failed!' },
+            HttpStatus.FORBIDDEN,
+          );
+        }
+      } else {
+        throw new HttpException(
+          { msg: 'User Not Verify!' },
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    } catch (error) {
+      throw new HttpException(
+        { msg: 'Try Again!' },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
 }

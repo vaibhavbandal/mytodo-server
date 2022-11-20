@@ -71,4 +71,19 @@ export class AuthController {
   async registerNewUser(@Body() otp: CacheManegerDto) {
     return await this.authService.registerNewUser(otp);
   }
+
+  @Post('forgot/verification')
+  async forgotVerification(@Body() email: {email : string}){
+    return await this.authService.forgotVerification(email);
+  }
+
+  @Post('forgot/otpVerification')
+  async otpVerification(@Body() otp : {otp : number}){
+    return await this.authService.forgotOtpVerification(otp);
+  }
+
+  @Post('forgot/changePassword')
+  async changePassword(@Body() newPassword: {newPassword : string}){
+      return await this.authService.changePassword(newPassword);
+  }
 }
