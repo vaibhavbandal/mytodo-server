@@ -13,15 +13,22 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthModule, BcryptModule, SendEmailModule,CacheManegerModule, PrismaModule,PassportModule.register({ session: true }), UserModule],
+  imports: [
+    AuthModule,
+    BcryptModule,
+    PrismaModule,
+    PassportModule.register({ session: true }),
+    UserModule,
+  ],
   controllers: [AppController],
-  providers: [AppService,
-  GoogleStrategy,
-  SessionSerializer,
-  {
-    provide: 'AUTH_SERVICE',
-    useClass: AuthService,
-  }
+  providers: [
+    AppService,
+    GoogleStrategy,
+    SessionSerializer,
+    {
+      provide: 'AUTH_SERVICE',
+      useClass: AuthService,
+    },
   ],
 })
 export class AppModule {}

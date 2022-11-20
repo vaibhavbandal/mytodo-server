@@ -6,9 +6,9 @@ import { LocalStrategy } from 'src/auth/utils/local.strategy';
 import { BcryptModule } from 'src/common/bcrypt/bcrypt.module';
 
 @Module({
-  imports:[PrismaModule, BcryptModule],
+  imports: [PrismaModule, BcryptModule],
   providers: [UserService],
   controllers: [UserController],
-  exports:[UserService]
+  exports: [UserService],
 })
 export class UserModule {}

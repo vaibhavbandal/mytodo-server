@@ -2,18 +2,17 @@ import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService  extends PrismaClient implements OnModuleInit {
-    async onModuleInit() {
-      await this.$connect();
-    }
-  
-    async enableShutdownHooks(app: INestApplication) {
-      this.$on('beforeExit', async () => {
-        await app.close();
-      });
-    }
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  async onModuleInit() {
+    await this.$connect();
   }
 
+  async enableShutdownHooks(app: INestApplication) {
+    this.$on('beforeExit', async () => {
+      await app.close();
+    });
+  }
+}
 
 //   import * as bcrypt from 'bcrypt';
 // import { Injectable } from '@nestjs/common';
@@ -31,7 +30,6 @@ export class PrismaService  extends PrismaClient implements OnModuleInit {
 //     return await bcrypt.compare(toBeChecked, storedHash);
 //   };
 // }
-
 
 // $ npm i bcrypt ==== yarn add bcrypt
 // $ npm i -D @types/bcrypt ==== yarn add @types/bcrypt -D
