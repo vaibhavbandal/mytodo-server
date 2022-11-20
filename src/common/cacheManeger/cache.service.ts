@@ -8,9 +8,9 @@ export class CacheManegerService {
   getData = () => {
     const value = this.cacheManager.get('user');
     return value;
-  };  
+  };
 
-  addToCache = (cacheBody : object) => {
+  addToCache = (cacheBody: object) => {
     this.cacheManager.set('user', cacheBody, 10000000);
     // console.log(this.getData())
   };
@@ -18,6 +18,4 @@ export class CacheManegerService {
   delCache = async (key: string) => await this.cacheManager.del('user');
 
   resetCache = async () => await this.cacheManager.reset();
-
-
 }

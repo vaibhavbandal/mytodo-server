@@ -1,5 +1,5 @@
 export class CacheManegerDto {
-    email : string 
-    password : string
-    otp : number
+  email: string;
+  password: string;
+  otp: number;
 }

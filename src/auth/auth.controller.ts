@@ -16,35 +16,34 @@ import { GoogleAuthGuard, LocalAuthGuard } from './utils/Guards';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-    @Get('google/login')
-    @UseGuards(GoogleAuthGuard)
-    handleLogin() {
-      return { msg: 'Google Authentication' };
-    }
-  
-    // api/auth/google/redirect
-    @Get('google/redirect')
-    @UseGuards(GoogleAuthGuard)
-    async handleRedirect(@Req() req,@Res() res) {
-      console.info(req.user)
-      const token  = await this.authService.loginWithCredentials(req.user);
-      res.send( token );
-    }
+  @Get('google/login')
+  @UseGuards(GoogleAuthGuard)
+  handleLogin() {
+    return { msg: 'Google Authentication' };
+  }
 
-    @Post('login')
-    @UseGuards(LocalAuthGuard)
-    async login(@Request() req:any) {
-      return this.authService.loginWithCredentials(req.user);
-    }
+  // api/auth/google/redirect
+  @Get('google/redirect')
+  @UseGuards(GoogleAuthGuard)
+  async handleRedirect(@Req() req, @Res() res) {
+    console.info(req.user);
+    const token = await this.authService.loginWithCredentials(req.user);
+    res.send(token);
+  }
 
-    @Post('verification')
-    async userVerification(@Body() bodyData:RegisterUserDto){
-       return await this.authService.userVerification(bodyData);
-    }
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  async login(@Request() req: any) {
+    return this.authService.loginWithCredentials(req.user);
+  }
 
-    @Post('register')
-    async registerNewUser(@Body() otp : number){
-      return await this.authService.registerNewUser(otp);
-    }
+  @Post('verification')
+  async userVerification(@Body() bodyData: RegisterUserDto) {
+    return await this.authService.userVerification(bodyData);
+  }
 
+  @Post('register')
+  async registerNewUser(@Body() otp: number) {
+    return await this.authService.registerNewUser(otp);
+  }
 }

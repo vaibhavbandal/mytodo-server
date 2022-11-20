@@ -5,21 +5,17 @@ import { CacheManegerDto } from '../cacheManeger/cacheManegerDto';
 
 @Injectable()
 export class SendEmailService {
-constructor(
-  private readonly cacheManagerService : CacheManegerService
-){}
-    // const getCacheData =(cacheData: CacheManegerDto)=> cacheData
+  constructor(private readonly cacheManagerService: CacheManegerService) {}
+  // const getCacheData =(cacheData: CacheManegerDto)=> cacheData
   sendEmail = async (): Promise<string> => {
-    
-  const cacheData: any = await this.cacheManagerService.getData();
+    const cacheData: any = await this.cacheManagerService.getData();
 
-
-  const userEmail = (cacheData: CacheManegerDto)=>{
-      return cacheData.email
-  }
-  const userOtp = (cacheData: CacheManegerDto)=>{
-    return cacheData.otp
-}
+    const userEmail = (cacheData: CacheManegerDto) => {
+      return cacheData.email;
+    };
+    const userOtp = (cacheData: CacheManegerDto) => {
+      return cacheData.otp;
+    };
 
     // let transporter = nodemailer.createTransport({
     //   service: 'gmail',
@@ -45,7 +41,7 @@ constructor(
     // } catch (e) {
     //   console.log(e);
     //   return 'Email Failed';
-    // }    
-    return "string"
+    // }
+    return 'string';
   };
 }

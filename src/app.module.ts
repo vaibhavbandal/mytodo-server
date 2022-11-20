@@ -6,7 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { GoogleStrategy } from './auth/utils/google.strategy';
 import { SessionSerializer } from './auth/utils/Serializer';
-import { BcryptModule } from './common/bcrypt.module';
 import { DateModule } from './common/date/date.module';
 import { BcryptModule } from './common/bcrypt/bcrypt.module';
 import { CacheManegerModule } from './common/cacheManeger/cache.module';
@@ -20,6 +19,7 @@ import { TodoModule } from './todo/todo.module';
     AuthModule,
     BcryptModule,
     DateModule,
+    CacheManegerModule,
     PrismaModule,
     SendEmailModule,
     PassportModule.register({ session: true }),

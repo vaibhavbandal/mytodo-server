@@ -3,8 +3,8 @@ import { CacheManegerModule } from '../cacheManeger/cache.module';
 import { SendEmailService } from './sendMail.service';
 
 @Module({
-  imports : [CacheManegerModule],
+  imports: [CacheManegerModule],
   providers: [SendEmailService],
-  exports : [SendEmailService]
+  exports: [SendEmailService],
 })
 export class SendEmailModule {}
