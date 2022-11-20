@@ -26,9 +26,33 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async handleRedirect(@Req() req, @Res() res) {
-    console.info(req.user);
-    const token = await this.authService.loginWithCredentials(req.user);
-    res.send(token);
+    const { access_token } = await this.authService.loginWithCredentials(
+      req.user,
+    );
+    const loginRedirectHtmp = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Google Login Redirect</title>
+    </head>
+    <body>
+            <h3>Wait....... Redirecting to React App</h3>
+    </body>
+    <script>
+        
+        function redirect(){
+                const url ='http://localhost:3001/login-google/${access_token}';
+                window.location.replace(url);    
+
+        }
+        
+        redirect();
+    
+    </script>
+    </html>`;
+    res.send(loginRedirectHtmp);
   }
 
   @Post('login')
