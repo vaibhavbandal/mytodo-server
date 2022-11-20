@@ -8,7 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*',
+  });
+
   app.use(
     session({
       secret: 'asiodasjoddjdoasddasdd3oidjasiodasdjaiodd',
@@ -22,7 +26,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 9000);
   console.info('=============================');
   console.info(`mytodo-server started at ${process.env.PORT}`);
   console.info('=============================');
