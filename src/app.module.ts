@@ -10,6 +10,7 @@ import { BcryptModule } from './common/bcrypt.module';
 import { DateModule } from './common/date/date.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './user/user.module';
     PrismaModule,
     PassportModule.register({ session: true }),
     UserModule,
+    TodoModule,
   ],
   controllers: [AppController],
   providers: [
