@@ -16,6 +16,8 @@ import { LocalStrategy } from './utils/local.strategy';
     PassportModule,
     UserModule,
     PrismaModule,
+    SendEmailModule,
+    CacheManegerModule,
     BcryptModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

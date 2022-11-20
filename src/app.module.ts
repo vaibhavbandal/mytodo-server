@@ -16,7 +16,9 @@ import { UserModule } from './user/user.module';
   imports: [
     AuthModule,
     BcryptModule,
+    CacheManegerModule,
     PrismaModule,
+    SendEmailModule,
     PassportModule.register({ session: true }),
     UserModule,
   ],
