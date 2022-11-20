@@ -6,12 +6,14 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { GoogleStrategy } from './auth/utils/google.strategy';
 import { SessionSerializer } from './auth/utils/Serializer';
-import { BcryptModule } from './common/bcrypt.module';
+import { BcryptModule } from './common/bcrypt/bcrypt.module';
+import { CacheManegerModule } from './common/cacheManeger/cache.module';
+import { SendEmailModule } from './common/SendMail/sendMail.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthModule, BcryptModule, PrismaModule,PassportModule.register({ session: true }), UserModule],
+  imports: [AuthModule, BcryptModule, SendEmailModule,CacheManegerModule, PrismaModule,PassportModule.register({ session: true }), UserModule],
   controllers: [AppController],
   providers: [AppService,
   GoogleStrategy,

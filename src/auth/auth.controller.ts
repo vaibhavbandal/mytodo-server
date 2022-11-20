@@ -31,9 +31,14 @@ export class AuthController {
       return this.authService.loginWithCredentials(req.user);
     }
 
+    @Post('verification')
+    async userVerification(@Body() bodyData:RegisterUserDto){
+       return await this.authService.userVerification(bodyData);
+    }
+
     @Post('register')
-    async registerNewUser(@Body() bodyData:RegisterUserDto){
-       return await this.authService.registerNewUser(bodyData);
+    async registerNewUser(@Body() otp : number){
+      return await this.authService.registerNewUser(otp);
     }
 
 }

@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { LocalStrategy } from 'src/auth/utils/local.strategy';
-import { BcryptModule } from 'src/common/bcrypt.module';
+import { BcryptModule } from 'src/common/bcrypt/bcrypt.module';
 
 @Module({
   imports:[PrismaModule, BcryptModule],
