@@ -8,6 +8,7 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
+import { CacheManegerDto } from 'src/common/cacheManeger/cacheManegerDto';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/user-register.dto';
 import { GoogleAuthGuard, LocalAuthGuard } from './utils/Guards';
@@ -67,7 +68,7 @@ export class AuthController {
   }
 
   @Post('register')
-  async registerNewUser(@Body() otp: number) {
+  async registerNewUser(@Body() otp: CacheManegerDto) {
     return await this.authService.registerNewUser(otp);
   }
 }

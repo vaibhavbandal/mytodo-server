@@ -16,7 +16,7 @@ export class AuthService {
     private readonly bcryptService: BcryptService,
     private readonly sendEmailService: SendEmailService,
     private jwtTokenService: JwtService,
-  ) {}
+  ) { }
 
   // This is for google Authentication...
   async validateUser(details: Prisma.UserCreateInput) {
@@ -56,7 +56,6 @@ export class AuthService {
 
   async userVerification(bodyData: RegisterUserDto) {
     // const uPassword = bodyData.password;
-
     const OTP = Math.floor(100000 + Math.random() * 900000);
 
     try {
@@ -75,23 +74,11 @@ export class AuthService {
         this.cacheManegerService.addToCache({
           email: bodyData.email,
           password: bodyData.password,
-          otp: OTP,
+          otp: OTP
         });
 
         const emailSend = await this.sendEmailService.sendEmail();
         return emailSend;
-
-        // await this
-        // const newUser = await this.prismaService.user.create({
-        //   data: {
-        //     email: bodyData.email,
-        //     provider: Provider.MANUAL,
-        //     role: Role.USER,
-        //     password: await this.bcryptService.plainToHash(uPassword),
-        //   },
-        // });
-        // const { password, ...result } = newUser;
-        // return result;
       }
     } catch (error) {
       throw new HttpException(
@@ -101,10 +88,43 @@ export class AuthService {
     }
   }
 
-  async registerNewUser(otp: number) {
+  async registerNewUser(otp: CacheManegerDto) {
     try {
-      const cacheData = this.cacheManegerService.getData();
-      console.log(cacheData);
+      const cacheData: any = await this.cacheManegerService.getData();
+
+      const getOtpFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.otp;
+      };
+
+      const getEmailFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.email;
+      };
+
+      const getPasswordFromCache = (cacheData: CacheManegerDto) => {
+        return cacheData.password;
+      };
+
+      const cacheOtp: number = await getOtpFromCache(cacheData);
+      const cacheEmail: string = await getEmailFromCache(cacheData);
+      const cachePassword: string = await getPasswordFromCache(cacheData);
+
+      if (cacheOtp == otp.otp) {
+        const newUser = await this.prismaService.user.create({
+          data: {
+            email: cacheEmail,
+            provider: Provider.MANUAL,
+            role: Role.USER,
+            password: await this.bcryptService.plainToHash(cachePassword),
+          },
+        });
+        const { password, ...result } = newUser;
+        return result;
+      } else {
+        throw new HttpException(
+          { msg: 'Invalid Otp!' },
+          HttpStatus.FORBIDDEN,
+        );
+      }
     } catch (error) {
       throw new HttpException(
         { msg: 'Please Register again!' },
