@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { BcryptModule } from 'src/common/bcrypt.module';
+import { BcryptModule } from 'src/common/bcrypt/bcrypt.module';
+import { CacheManegerModule } from 'src/common/cacheManeger/cache.module';
+import { SendEmailModule } from 'src/common/SendMail/sendMail.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
@@ -14,6 +16,8 @@ import { LocalStrategy } from './utils/local.strategy';
     PassportModule,
     UserModule,
     PrismaModule,
+    SendEmailModule,
+    CacheManegerModule,
     BcryptModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

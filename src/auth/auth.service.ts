@@ -1,7 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma, Provider, Role } from '@prisma/client';
-import { BcryptService } from 'src/common/bcrypt.service';
+import { BcryptService } from 'src/common/bcrypt/bcrypt.service';
+import { CacheManegerService } from 'src/common/cacheManeger/cache.service';
+import { CacheManegerDto } from 'src/common/cacheManeger/cacheManegerDto';
+import { SendEmailService } from 'src/common/SendMail/sendMail.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterUserDto } from './dto/user-register.dto';
 
@@ -9,7 +12,9 @@ import { RegisterUserDto } from './dto/user-register.dto';
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly cacheManegerService: CacheManegerService,
     private readonly bcryptService: BcryptService,
+    private readonly sendEmailService: SendEmailService,
     private jwtTokenService: JwtService,
   ) {}
 
@@ -49,8 +54,11 @@ export class AuthService {
     }
   }
 
-  async registerNewUser(bodyData: RegisterUserDto) {
-    const uPassword = bodyData.password;
+  async userVerification(bodyData: RegisterUserDto) {
+    // const uPassword = bodyData.password;
+
+    const OTP = Math.floor(100000 + Math.random() * 900000);
+
     try {
       const isUserExist = await this.prismaService.user.findUnique({
         where: {
@@ -64,21 +72,42 @@ export class AuthService {
           HttpStatus.FORBIDDEN,
         );
       } else {
-        const newUser = await this.prismaService.user.create({
-          data: {
-            email: bodyData.email,
-            provider: Provider.MANUAL,
-            role: Role.USER,
-            password: await this.bcryptService.plainToHash(uPassword),
-          },
+        this.cacheManegerService.addToCache({
+          email: bodyData.email,
+          password: bodyData.password,
+          otp: OTP,
         });
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, ...result } = newUser;
-        return result;
+
+        const emailSend = await this.sendEmailService.sendEmail();
+        return emailSend;
+
+        // await this
+        // const newUser = await this.prismaService.user.create({
+        //   data: {
+        //     email: bodyData.email,
+        //     provider: Provider.MANUAL,
+        //     role: Role.USER,
+        //     password: await this.bcryptService.plainToHash(uPassword),
+        //   },
+        // });
+        // const { password, ...result } = newUser;
+        // return result;
       }
     } catch (error) {
       throw new HttpException(
         { msg: 'Email is already used!' },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async registerNewUser(otp: number) {
+    try {
+      const cacheData = this.cacheManegerService.getData();
+      console.log(cacheData);
+    } catch (error) {
+      throw new HttpException(
+        { msg: 'Please Register again!' },
         HttpStatus.FORBIDDEN,
       );
     }
