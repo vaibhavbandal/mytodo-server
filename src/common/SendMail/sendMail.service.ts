@@ -5,7 +5,7 @@ import { CacheManegerDto } from '../cacheManeger/cacheManegerDto';
 
 @Injectable()
 export class SendEmailService {
-  constructor(private readonly cacheManagerService: CacheManegerService) { }
+  constructor(private readonly cacheManagerService: CacheManegerService) {}
   // const getCacheData =(cacheData: CacheManegerDto)=> cacheData
   sendEmail = async (): Promise<string> => {
     const cacheData: any = await this.cacheManagerService.getData();
@@ -21,14 +21,14 @@ export class SendEmailService {
     const userEmailFromCache: string = await userEmail(cacheData);
     const userOtpFromCache: number = await userOtp(cacheData);
 
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PASS,
       },
     });
-    let mailDetails = {
+    const mailDetails = {
       from: 'mytodos@gmail.com',
       to: `${userEmailFromCache}`,
       subject: 'MyToDos Email Authentification ',

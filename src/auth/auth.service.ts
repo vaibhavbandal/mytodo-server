@@ -16,7 +16,7 @@ export class AuthService {
     private readonly bcryptService: BcryptService,
     private readonly sendEmailService: SendEmailService,
     private jwtTokenService: JwtService,
-  ) { }
+  ) {}
 
   // This is for google Authentication...
   async validateUser(details: Prisma.UserCreateInput) {
@@ -74,7 +74,7 @@ export class AuthService {
         this.cacheManegerService.addToCache({
           email: bodyData.email,
           password: bodyData.password,
-          otp: OTP
+          otp: OTP,
         });
 
         const emailSend = await this.sendEmailService.sendEmail();
@@ -117,13 +117,11 @@ export class AuthService {
             password: await this.bcryptService.plainToHash(cachePassword),
           },
         });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...result } = newUser;
         return result;
       } else {
-        throw new HttpException(
-          { msg: 'Invalid Otp!' },
-          HttpStatus.FORBIDDEN,
-        );
+        throw new HttpException({ msg: 'Invalid Otp!' }, HttpStatus.FORBIDDEN);
       }
     } catch (error) {
       throw new HttpException(
