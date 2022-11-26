@@ -44,7 +44,7 @@ export class AuthController {
     <script>
         
         function redirect(){
-                const url ='http://localhost:3001/login-google/${access_token}';
+                const url ='http://localhost:3000/login-google/${access_token}';
                 window.location.replace(url);    
 
         }
